@@ -6,30 +6,33 @@
 #include <stdbool.h>
 
 
-int c = 0;
-int secs = 0;
-bool t = true;
+int count = 0;
+int seconds = 0;
+bool flag = false;
 
 void handler(int signum){
   printf("Hello World!\n");
-  printf("Turing was right!\n");
-  alarm(1);
+  flag = true;
 }
 
 void sigHandler(int signum){
-  signal(SIGINT, sigHandler);
-  printf("\n %d no of alarms occured for %d seconds\n", c,secs);
-  t = false;
+  printf("\n %d no of alarms occured for %d seconds\n", count,seconds);
+  exit(1);
 }
 
 int main(int argc, char * argv[]){
-  while(t){
-    signal(SIGALRM,handler); //register handler to handle SIGALRM
-    alarm(1); //Schedule a SIGALRM for 1 second
-    sleep(1);
-    signal(SIGINT, sigHandler);
-    c++;
-    secs++;
+  signal(SIGALRM,handler);
+  signal(SIGINT, sigHandler);
+  alarm(1);
+  while(1){
+    if (flag){
+      printf("Turing was right!\n");
+      //Schedule a SIGALRM for 1 second
+      flag = false
+      alarm(1);
+      count++;
+      seconds++;
+    }
   }
   
   return 0; //never reached
